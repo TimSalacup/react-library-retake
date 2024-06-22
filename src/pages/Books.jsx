@@ -2,19 +2,33 @@ import React, { useState } from "react";
 import Book from "../components/ui/Book";
 
 export default function Books({ books: initialBooks }) {
+  const [books, setBooks] = useState(initialBooks);
 
-    const [books, setBooks] = useState(initialBooks);
-    let sortedBooks = [];
-    
-    function filterBooks(value) {
-        if(value === 'HIGH_TO_LOW') {
-            setBooks(books.slice().sort((a, b) => ((b.salePrice || b.originalPrice) - (a.salePrice || a.originalPrice))));
-        }
-        else if(value === 'LOW_TO_HIGH') {
-            setBooks(books.slice().sort((a, b) => ((a.salePrice || a.originalPrice) - (b.salePrice || b.originalPrice))));
-        }
-        else if(value === 'RATING') console.log("rating");
+  function filterBooks(value) {
+    if (value === "HIGH_TO_LOW") {
+      setBooks(
+        books
+          .slice()
+          .sort(
+            (a, b) =>
+              (b.salePrice || b.originalPrice) -
+              (a.salePrice || a.originalPrice)
+          )
+      );
+    } else if (value === "LOW_TO_HIGH") {
+      setBooks(
+        books
+          .slice()
+          .sort(
+            (a, b) =>
+              (a.salePrice || a.originalPrice) -
+              (b.salePrice || b.originalPrice)
+          )
+      );
+    } else if (value === "RATING") {
+      setBooks(books.slice().sort((a, b) => b.rating - a.rating));
     }
+  }
 
   return (
     <div id="books__body">
@@ -26,7 +40,11 @@ export default function Books({ books: initialBooks }) {
                 <h2 className="section__title books__header--title">
                   All Books
                 </h2>
-                <select id="filter" defaultValue="DEFAULT" onChange={(event) => filterBooks(event.target.value)}>
+                <select
+                  id="filter"
+                  defaultValue="DEFAULT"
+                  onChange={(event) => filterBooks(event.target.value)}
+                >
                   <option value="DEFAULT" disabled>
                     Sort
                   </option>
@@ -36,11 +54,9 @@ export default function Books({ books: initialBooks }) {
                 </select>
               </div>
               <div className="books">
-                {
-                    books.map((book) => (
-                        <Book book={book} key={book.id} />
-                    ))
-                }
+                {books.map((book) => (
+                  <Book book={book} key={book.id} />
+                ))}
               </div>
             </div>
           </div>
