@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
+import CartItem from "../components/ui/CartItem";
 
-export default function Cart({ books }) {
+export default function Cart({ books, cart, itemValue }) {
+  
   return (
     <div id="books__body">
       <main id="books__main">
@@ -16,26 +18,16 @@ export default function Cart({ books }) {
                 <span className="cart__total">Price</span>
               </div>
               <div className="cart__body">
-                <div className="cart__item">
-                  <div className="cart__book">
-                    <img
-                      src="https://covers.openlibrary.org/b/id/8091016-L.jpg"
-                      alt=""
-                      className="cart__book--img"
-                    />
-                    <div className="cart__book--info">
-                      <span className="cart__book--title">
-                        Crack the Coding Interview
-                      </span>
-                      <span className="cart__book--price">$10.00</span>
-                      <button className="cart__book--remove">Remove</button>
-                    </div>
-                  </div>
-                  <div className="cart__quantity">
-                    <input type="number" min={0} max={99} class="cart__input" />
-                  </div>
-                <div className="cart__total">$10.00</div>
-                </div>
+                {cart.map((book) => (
+                  <CartItem
+                    url={book.url}
+                    title={book.title}
+                    origPrice={book.originalPrice}
+                    salePrice={book.salePrice}
+                    itemValue = {itemValue}
+                    key = {book.id}
+                  />
+                ))}
               </div>
             </div>
             <div className="total">
@@ -53,7 +45,7 @@ export default function Cart({ books }) {
               </div>
               <button
                 className="btn btn__checkout no-cursor"
-                onclick={() => alert("Haven't got around to doing this :(")}
+                onClick={() => alert("Haven't got around to doing this :(")}
               >
                 Proceed to checkout
               </button>
