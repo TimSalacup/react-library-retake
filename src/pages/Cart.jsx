@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import CartItem from "../components/ui/CartItem";
 
-export default function Cart({ books, cart, itemValue }) {
+export default function Cart({ cart, inputs, updateInputValues, totalPrice, totalDetails, removeItem }) {
   
   return (
     <div id="books__body">
@@ -20,12 +20,11 @@ export default function Cart({ books, cart, itemValue }) {
               <div className="cart__body">
                 {cart.map((book) => (
                   <CartItem
-                    url={book.url}
-                    title={book.title}
-                    origPrice={book.originalPrice}
-                    salePrice={book.salePrice}
-                    itemValue = {itemValue}
+                    book = {book}
+                    inputs = {inputs}
+                    updateInputValues={updateInputValues}
                     key = {book.id}
+                    removeItem = {removeItem}
                   />
                 ))}
               </div>
@@ -33,15 +32,15 @@ export default function Cart({ books, cart, itemValue }) {
             <div className="total">
               <div className="total__item total__sub-total">
                 <span>Subtotal</span>
-                <span>$9.00</span>
+                <span>${totalDetails.subtotal.toFixed(2)}</span>
               </div>
               <div className="total__item total__tax">
                 <span>Tax</span>
-                <span>$1.00</span>
+                <span>${totalDetails.tax.toFixed(2)}</span>
               </div>
               <div className="total__item total__price">
                 <span>Total</span>
-                <span>$10.00</span>
+                <span>${ totalPrice.toFixed(2) }</span>
               </div>
               <button
                 className="btn btn__checkout no-cursor"
