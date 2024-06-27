@@ -2,7 +2,7 @@ import React from "react";
 import CartItem from "../components/ui/CartItem";
 
 export default function Cart({ cart, inputs, updateInputValues, totalPrice, totalDetails, removeItem }) {
-  
+
   return (
     <div id="books__body">
       <main id="books__main">

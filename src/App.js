@@ -11,11 +11,11 @@ import { useEffect, useState } from "react";
 function App() {
   const [cart, setCart] = useState([]);
   const [inputs, changeInputs] = useState([]);
+  const [onCart, changeOnCart] = useState(false) 
   const [cartNum, changeCartNum] = useState(0);
-  const [prices, updatePricesArray] = useState([]);
   const [total, setTotal] = useState(0);
-  const [totalDetails, setTotalDetails] = useState({tax: 0, subtotal: 0})
-  function addToCart(book, itemValue) {
+  const [totalDetails, setTotalDetails] = useState({ tax: 0, subtotal: 0 });
+  function addToCart(book, quantity) {
     // if it is the first time putting it in the cart:
     if (!cart.find((item) => item.id === book.id)) {
       setCart([...cart, book]);
@@ -23,12 +23,20 @@ function App() {
         ...inputs,
         {
           id: book.id,
-          value: itemValue,
+          value: quantity,
           price: +book.salePrice || book.originalPrice,
         },
       ]);
     }
   }
+
+  // function isOnCart(id) {
+  //   return inputs.find((input) => input.id === id);
+  // }
+
+  // useEffect(() => {
+  //   isOnCart()
+  // }, [inputs])
 
   function updateInputValues(id, newValue) {
     changeInputs(
@@ -36,18 +44,6 @@ function App() {
         input.id === id ? { ...input, value: +newValue } : input
       )
     );
-  }
-
-  function updatePrices(newPrice, priceId) {
-    if (!prices.find((price) => price.id === priceId)) {
-      // first time putting the price in the array
-      updatePricesArray([...prices, { id: priceId, price: newPrice }]);
-    } else
-      updatePricesArray(
-        prices.map((price) =>
-          price.id === priceId ? { ...price, price: newPrice } : price
-        )
-      );
   }
 
   function totalCartNumber() {
@@ -68,23 +64,18 @@ function App() {
 
   function removeItem(id) {
     setCart(cart.filter((item) => item.id !== id));
-    changeInputs(inputs.filter(input => input.id !== id));
-    updatePricesArray(prices.filter(price => price.id !== id));
+    changeInputs(inputs.filter((input) => input.id !== id));
   }
 
   useEffect(() => {
     // calculates the prices total
     totalPrices();
-  }, [inputs, prices]);
-
-  useEffect(() => {
     totalCartNumber();
-  }, [inputs, prices]);
+  }, [inputs]);
 
   useEffect(() => {
-    setTotalDetails({ tax: cartNum, subtotal: total - cartNum});
-
-  }, [total, inputs])
+    setTotalDetails({ tax: cartNum, subtotal: total - cartNum });
+  }, [total, inputs]);
 
   return (
     <Router>
@@ -95,7 +86,14 @@ function App() {
           <Route path="/books" exact element={<Books books={books} />} />
           <Route
             path="/books/:id"
-            element={<BookInfo books={books} addToCart={addToCart} />}
+            element={
+              <BookInfo
+                cart={cart}
+                books={books}
+                addToCart={addToCart}
+                // isOnCart={isOnCart}
+              />
+            }
           />
           <Route
             path="/cart"
@@ -105,10 +103,9 @@ function App() {
                 cart={cart}
                 inputs={inputs}
                 updateInputValues={updateInputValues}
-                updatePrices={updatePrices}
-                totalPrice = {total}
-                totalDetails = {totalDetails}
-                removeItem = {removeItem}
+                totalPrice={total}
+                totalDetails={totalDetails}
+                removeItem={removeItem}
               />
             }
           />
