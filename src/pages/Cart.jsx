@@ -1,5 +1,8 @@
 import React from "react";
 import CartItem from "../components/ui/CartItem";
+import EmptyCart from "../assets/empty_cart.svg"
+import { Link } from "react-router-dom";
+import Books from "./Books";
 
 export default function Cart({ cart, inputs, updateInputValues, totalPrice, totalDetails, removeItem }) {
 
@@ -28,8 +31,16 @@ export default function Cart({ cart, inputs, updateInputValues, totalPrice, tota
                   />
                 ))}
               </div>
+              {cart.length === 0 && <div className="cart__empty">
+                <img src={EmptyCart} alt="" className="cart__empty--img" />
+                <h2>You don't have any books in your cart!</h2>
+                <Link to="/books">
+                <button className="btn">Browse books</button>
+                </Link>
+              </div>}
             </div>
-            <div className="total">
+            {cart.length > 0 &&
+              <div className="total">
               <div className="total__item total__sub-total">
                 <span>Subtotal</span>
                 <span>${totalDetails.subtotal.toFixed(2)}</span>
@@ -48,7 +59,7 @@ export default function Cart({ cart, inputs, updateInputValues, totalPrice, tota
               >
                 Proceed to checkout
               </button>
-            </div>
+            </div>}
           </div>
         </div>
       </main>
