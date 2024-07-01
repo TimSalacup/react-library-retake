@@ -59,7 +59,7 @@ export default function BookInfo({ cart, books, addToCart }) {
                     </p>
                   </div>
                   {isOnCart(id) ? (
-                    <button className="btn">Checkout</button>
+                    <Link to="/cart" className="btn">Checkout</Link>
                   ) : (
                     <button className="btn" onClick={() => addToCart(book, 1)}>
                       Add to cart
